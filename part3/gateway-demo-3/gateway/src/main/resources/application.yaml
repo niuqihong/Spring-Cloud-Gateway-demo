@@ -4,15 +4,23 @@ spring:
   application:
     name: gateway
   cloud:
+    loadbalancer:
+      enabled: true # 开启负载均衡
     gateway:
+      discovery:
+        locator:
+          enabled: true # 开启服务发现
       routes:
           - id: provider
-            uri: http://localhost:8081
+            uri: lb://provider # lb:负载均衡
             order: 1
             predicates:
                 - Path=/find/**
           - id: consumer
-            uri: http://localhost:8082
+            uri: lb://consumer # lb:负载均衡
             order: 1
             predicates:
                 - Path=/search/**
+    nacos:
+      discovery:
+          server-addr: 127.0.0.1:8848 # nacos服务地址
